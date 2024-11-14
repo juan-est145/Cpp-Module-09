@@ -13,6 +13,7 @@ private:
 	std::stack<int> _stack;
 	bool isCharValid(const char c) const;
 	bool isOperand(const char c) const;
+	void processOp(const char c);
 
 public:
 	RPN(void);
