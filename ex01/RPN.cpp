@@ -1,28 +1,22 @@
 #include "RPN.hpp"
 
-// Constructors
 RPN::RPN() {}
 
 RPN::RPN(const RPN &copy)
 {
-	_stack = copy.getStack();
+	*this = copy;
 }
 
-RPN::RPN(std::stack<int> stack)
+int RPN::rpnCalculation(std::string &op)
 {
-	_stack = stack;
+	return (0);
 }
 
-
-// Destructor
-RPN::~RPN()
-{
-}
-
-
-// Operators
 RPN & RPN::operator=(const RPN &assign)
 {
-	_stack = assign.getStack();
-	return *this;
+	if (this != &assign)
+		this->_stack = assign._stack;
+	return (*this);
 }
+
+RPN::~RPN() {}
