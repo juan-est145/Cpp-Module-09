@@ -52,20 +52,26 @@ void RPN::processOp(const char c)
 	this->_stack.pop();
 	int num2 = this->_stack.top();
 	this->_stack.pop();
-
-	if (c == '+')
-		this->_stack.push(num2 + num1);
-	else if (c == '-')
-		this->_stack.push(num2 - num1);
-	else if (c == '*')
-		this->_stack.push(num2 * num1);
-	else if (c == '/' && num1 == 0)
+	if (c == '/' && num1 == 0)
 	{
 		std::cerr << "Error, cannot divide by cero" << std::endl;
 		exit(1);
 	}
-	else
+	switch (c)
+	{
+	case '+':
+		this->_stack.push(num2 + num1);
+		break;
+	case '-':
+		this->_stack.push(num2 - num1);
+		break;
+	case '*':
+		this->_stack.push(num2 * num1);
+		break;
+	default:
 		this->_stack.push(num2 / num1);
+		break;
+	}
 }
 
 RPN &RPN::operator=(const RPN &assign)
