@@ -6,7 +6,7 @@
 /*   By: juestrel <juestrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 22:19:22 by juestrel          #+#    #+#             */
-/*   Updated: 2024/11/15 18:58:06 by juestrel         ###   ########.fr       */
+/*   Updated: 2024/11/15 20:07:59 by juestrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,6 @@ int main(int argc, char *argv[])
 		return (1);
 	}
 	BitcoinExchange bE("data.csv");
+	bE.getValues(argv[1]);
 	return (0);
 }

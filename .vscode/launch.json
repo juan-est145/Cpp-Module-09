@@ -11,7 +11,7 @@
 			"program": "${workspaceRoot}/ex00/btc",
 			"args": ["input.txt"],
 			"stopAtEntry": false,
-			"cwd": "${fileDirname}",
+			"cwd": "${workspaceFolder}/ex00",
 			"environment": [],
 			"externalConsole": false,
 			"MIMode": "gdb",

@@ -6,7 +6,7 @@
 /*   By: juestrel <juestrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 17:47:35 by juestrel          #+#    #+#             */
-/*   Updated: 2024/11/15 19:16:58 by juestrel         ###   ########.fr       */
+/*   Updated: 2024/11/15 20:18:56 by juestrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,32 +62,95 @@ void BitcoinExchange::getValues(const char *data)
 	std::getline(bcVal, line);
 	while (std::getline(bcVal, line))
 	{
-		t_status status = CORRECT;
+		tStatus status = CORRECT;
 		std::stringstream stream(line);
 		std::string valueS, date;
 		std::getline(stream, date, '|');
 		std::getline(stream, valueS);
-		if ((status = this->valData(date)) != CORRECT || (status = this->valData(date, valueS)) != CORRECT)
+		if ((status = this->valDate(date)) != CORRECT || (status = this->valValue(valueS)) != CORRECT)
 		{
-			//COUT SOMETHING
+			this->printMsg(status, date, std::atof(valueS.c_str()));
 			continue;
 		}
 		if (this->_bitcoinPrices.find(date) == this->_bitcoinPrices.end())
-		{
-			//DO something
-		}
-		//Default case
+			date = this->findClosestDate(date);
+		this->printMsg(status, date, std::atof(valueS.c_str()));
 	}
 }
 
-BitcoinExchange::t_status BitcoinExchange::valData(const std::string &date)
+BitcoinExchange::tStatus BitcoinExchange::valDate(std::string &date)
 {
-	
+	date.erase(0, date.find_first_not_of(' '));
+	date.erase(date.find_last_not_of(' ') + 1);
+
+	if (date.empty() || date[4] != '-' || date[7] != '-' || date.size() != 10)
+		return (E_BAD_INPUT);
+	int year = std::atoi(date.substr(0, 4).c_str());
+	int month = std::atoi(date.substr(5, 2).c_str());
+	int day = std::atoi(date.substr(8, 2).c_str());
+	if (year <= 0 || month <= 0 || month > 12)
+		return (E_BAD_INPUT);
+	int maxDay = 31;
+	if (month == 2)
+	{
+		bool isLeap = (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+		maxDay = isLeap ? 29 : 28;
+	}
+	else if (month == 4 || month == 6 || month == 9 || month == 11)
+		maxDay = 30;
+	if (day <= 0 || day > maxDay)
+		return (E_BAD_INPUT);
+	return (CORRECT);
 }
 
-BitcoinExchange::t_status BitcoinExchange::valData(const std::string &date, const std::string &valueS)
+BitcoinExchange::tStatus BitcoinExchange::valValue(std::string &valueS)
 {
-	
+	valueS.erase(0, valueS.find_first_not_of(' '));
+	valueS.erase(valueS.find_last_not_of(' ') + 1);
+	if (valueS.empty())
+		return (E_BAD_INPUT);
+	for (size_t i = 0; i < valueS.size(); i++)
+	{
+		if (!std::isdigit(valueS[i]) && valueS[i] != '.' && valueS[i] != '-' && valueS[i] != '+')
+			return (E_BAD_INPUT);
+	}
+	double valueBtc = std::atof(valueS.c_str());
+	if (valueBtc > 1000)
+		return (E_LARGE);
+	else if (valueBtc < 0)
+		return (E_NEGATIVE);
+	return (CORRECT);
+}
+
+std::string BitcoinExchange::findClosestDate(const std::string &date)
+{
+	std::string closest;
+	for (std::map<std::string, float>::iterator it = this->_bitcoinPrices.begin(); it != this->_bitcoinPrices.end(); ++it)
+	{
+		if (it->first > date)
+			break;
+		closest = it->first;
+	}
+	return (closest);
+}
+
+void BitcoinExchange::printMsg(tStatus status, const std::string &date, float value)
+{
+	if (status == CORRECT)
+	{
+		std::cout << date << " => " << value << " = " << this->_bitcoinPrices[date] * value << std::endl;
+		return;
+	}
+	std::cout << "Error: ";
+	if (date.empty())
+		std::cout << "no previous date found";
+	else if (status == E_BAD_INPUT)
+		std::cout << "bad input => " << date;
+	else if (status == E_LARGE)
+		std::cout << " too large a number => " << date;
+	else if (status == E_NEGATIVE)
+		std::cout << " not a positive number => " << date;
+	std::cout << std::endl;
 }
 
 BitcoinExchange::~BitcoinExchange() {}

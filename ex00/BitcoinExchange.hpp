@@ -11,16 +11,18 @@
 class BitcoinExchange
 {
 private:
-	typedef enum e_status
+	typedef enum eStatus
 	{
 		CORRECT,
 		E_BAD_INPUT,
 		E_LARGE,
 		E_NEGATIVE,
-	} t_status;
+	} tStatus;
 	std::map<std::string, float> _bitcoinPrices;
-	t_status valData(const std::string &date);
-	t_status valData(const std::string &date, const std::string &valueS);
+	tStatus valDate(std::string &date);
+	tStatus valValue(std::string &valueS);
+	std::string findClosestDate(const std::string &date);
+	void printMsg(tStatus status, const std::string &date, float value);
 
 public:
 	BitcoinExchange(void);
