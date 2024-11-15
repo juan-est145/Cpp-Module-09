@@ -6,7 +6,7 @@
 /*   By: juestrel <juestrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 20:31:27 by juestrel          #+#    #+#             */
-/*   Updated: 2024/11/15 22:50:32 by juestrel         ###   ########.fr       */
+/*   Updated: 2024/11/15 23:50:11 by juestrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,25 @@ static void valArgs(int argc, char *argv[], std::vector<int> &vector, std::deque
 	}
 	std::vector<int> vector;
 	std::deque<int> deque;
-	PmergeMe merge;
 	valArgs(argc, argv, vector, deque);
-	merge.mergeInsertSort(vector);
-	merge.mergeInsertSort(deque);
+	double vectorTm = PmergeMe::sort(vector);
+	double dequeTm = PmergeMe::sort(deque);
+	std::cout << "Before: ";
+	for (size_t i = 1; i < (size_t)argc; i++)
+	{
+		for (size_t j = 0; argv[i][j]; j++)
+			std::cout << argv[i][j] << " ";
+	}
+	std::cout << std::endl;
+	std::cout << "After: ";
+	for (std::vector<int>::iterator it = vector.begin(); it != vector.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	std::cout << "After: ";
+	for (std::deque<int>::iterator it = deque.begin(); it != deque.end(); it++)
+		std::cout << *it << " ";
+	std::cout << std::endl;
+	std::cout << "Time to process a range of " << vector.size() << " elements with std::vector<int> : " << vectorTm << " us" << std::endl;
+		std::cout << "Time to process a range of " << deque.size() << " elements with std::deque<int> : " << dequeTm << " us" << std::endl;
 	return (0);
 }
