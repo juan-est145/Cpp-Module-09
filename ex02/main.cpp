@@ -6,13 +6,13 @@
 /*   By: juestrel <juestrel@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/15 20:31:27 by juestrel          #+#    #+#             */
-/*   Updated: 2024/11/15 21:45:49 by juestrel         ###   ########.fr       */
+/*   Updated: 2024/11/15 22:50:32 by juestrel         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
 
-static void valArgs(int argc, char *argv[], PmergeMe<std::vector<int> > &vector, PmergeMe<std::deque<int> > &deque)
+static void valArgs(int argc, char *argv[], std::vector<int> &vector, std::deque<int> &deque)
 {
 	for (size_t i = 1; i < (unsigned int)argc; i++)
 	{
@@ -49,9 +49,11 @@ static void valArgs(int argc, char *argv[], PmergeMe<std::vector<int> > &vector,
 		std::cout << "Error, you need to provide at least a number as an argument" << std::endl;
 		return (1);
 	}
-	PmergeMe<std::vector<int> > vector;
-	PmergeMe<std::deque<int> > deque;
-
+	std::vector<int> vector;
+	std::deque<int> deque;
+	PmergeMe merge;
 	valArgs(argc, argv, vector, deque);
+	merge.mergeInsertSort(vector);
+	merge.mergeInsertSort(deque);
 	return (0);
 }
