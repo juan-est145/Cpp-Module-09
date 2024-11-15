@@ -20,10 +20,9 @@ private:
 	static void mergeInsertSort(std::deque<int> &deque);
 	static void insertSmallNums(std::deque<int> &result, int target);
 	~PmergeMe(void);
-	
-	
+
 public:
-	static double sort(std::vector <int> &vector);
+	static double sort(std::vector<int> &vector);
 	static double sort(std::deque<int> &deque);
 };
 
