@@ -10,6 +10,8 @@
 
 class PmergeMe
 {
+private:
+	void insertSmallNums(std::vector <int> &result, int target);
 public:
 	PmergeMe(void);
 	PmergeMe(const PmergeMe &copy);
